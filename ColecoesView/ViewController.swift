@@ -72,7 +72,9 @@ class ViewController: UIViewController
             let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
             cell.isEditing = editing
         }
-        deleteButton.isEnabled = isEditing
+        
+//        deleteButton.isEnabled = isEditing
+        
         if !isEditing
         {
             navigationController?.isToolbarHidden = !isEditing
@@ -135,5 +137,4 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate
             navigationController?.isToolbarHidden = false
         }
     }
-    
 }
