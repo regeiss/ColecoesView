@@ -25,6 +25,8 @@ class ViewController: UIViewController
         
         // Adiciona botao de edicao
         navigationItem.leftBarButtonItem = editButtonItem
+        // Oculta a toolbar no rodape
+        navigationController?.isToolbarHidden = true
 
     }
     
@@ -40,6 +42,8 @@ class ViewController: UIViewController
             
             collectionView.deleteItems(at: selected)
         }
+        
+        navigationController?.isToolbarHidden = true
     }
     
     @IBAction func addItem()
@@ -56,6 +60,11 @@ class ViewController: UIViewController
         super.setEditing(editing, animated: animated)
         addButton.isEnabled = !editing
         collectionView.allowsMultipleSelection = editing
+        collectionView.indexPathsForSelectedItems?.forEach
+            {
+                collectionView.deselectItem(at: $0, animated: false)
+            }
+        
         let indexPaths = collectionView.indexPathsForVisibleItems
         
         for indexPath in indexPaths
@@ -64,6 +73,23 @@ class ViewController: UIViewController
             cell.isEditing = editing
         }
         deleteButton.isEnabled = isEditing
+        if !isEditing
+        {
+            navigationController?.isToolbarHidden = !isEditing
+        }
+    }
+    
+    // Trata a navegacao para outra view
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.identifier == "DetailSegue"
+        {
+            if let dest = segue.destination as? DetailViewController,
+                let index = sender as? IndexPath
+            {
+                dest.selectionString =  collectionViewData[index.row]
+            }
+        }
     }
 }
 
@@ -85,25 +111,29 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate
 
     }
 
-    // Trata a selecao da celula
+    // Trata a selecao da celula - didDeselectItemAt
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
+    {
+        if isEditing
+        {
+            if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
+            {
+                navigationController?.isToolbarHidden = true
+            }
+        }
+    }
+    
+    // Trata a selecao da celula - didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
         if !isEditing
         {
             performSegue(withIdentifier: "DetailSegue", sender: indexPath)
         }
-    }
-    
-    // Trata a navegacao para outra view
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
-        if segue.identifier == "DetailSegue"
+        else
         {
-            if let dest = segue.destination as? DetailViewController,
-            let index = sender as? IndexPath
-            {
-                dest.selectionString =  collectionViewData[index.row]
-            }
+            navigationController?.isToolbarHidden = false
         }
     }
+    
 }
