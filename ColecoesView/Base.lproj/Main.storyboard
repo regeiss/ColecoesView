@@ -78,15 +78,23 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="auu-K9-eR8">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="gGg-Qp-IdK">
-                            <connections>
-                                <action selector="addItem" destination="BYZ-38-t0r" id="lwh-W1-eHD"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="gGg-Qp-IdK">
+                                <connections>
+                                    <action selector="addItem" destination="BYZ-38-t0r" id="lwh-W1-eHD"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem enabled="NO" systemItem="trash" id="Eaa-da-AFk">
+                                <connections>
+                                    <action selector="deleteSelected" destination="BYZ-38-t0r" id="QyY-zU-E1S"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="gGg-Qp-IdK" id="5zC-gh-bHb"/>
                         <outlet property="collectionView" destination="1yu-Mg-WXl" id="jZG-mk-aZx"/>
+                        <outlet property="deleteButton" destination="Eaa-da-AFk" id="xws-EI-eMF"/>
                         <segue destination="13h-S5-eXy" kind="show" identifier="DetailSegue" id="wqf-al-76W"/>
                     </connections>
                 </viewController>

@@ -12,6 +12,7 @@ class ViewController: UIViewController
 {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var addButton: UIBarButtonItem!
+    @IBOutlet private weak var deleteButton: UIBarButtonItem!
     
     var collectionViewData = ["1🏆" , "2 🐸", "3 🍩", "4 😸", "5 🤡", "6 👾", "7 👻", "8 🍖", "9 🎸", "10 🐯", "11 🐷", "12 🌋"]
     
@@ -25,6 +26,20 @@ class ViewController: UIViewController
         // Adiciona botao de edicao
         navigationItem.leftBarButtonItem = editButtonItem
 
+    }
+    
+    @IBAction func deleteSelected()
+    {
+        if let selected = collectionView.indexPathsForSelectedItems
+        {
+            let items = selected.map {$0.item}.sorted().reversed()
+            for item in items
+            {
+                collectionViewData.remove(at: item)
+            }
+            
+            collectionView.deleteItems(at: selected)
+        }
     }
     
     @IBAction func addItem()
@@ -48,7 +63,7 @@ class ViewController: UIViewController
             let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
             cell.isEditing = editing
         }
-
+        deleteButton.isEnabled = isEditing
     }
 }
 
@@ -73,7 +88,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate
     // Trata a selecao da celula
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        if isEditing
+        if !isEditing
         {
             performSegue(withIdentifier: "DetailSegue", sender: indexPath)
         }
